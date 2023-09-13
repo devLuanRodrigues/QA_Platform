@@ -1,9 +1,28 @@
 const express = require("express");
 const app = express();
+const bodyParser = require("body-parser");
+const connection = require("./db/db");
+const questionModel = require("./db/questionModel");
 
+// Database
+connection
+    .authenticate()
+    .then(() => {
+        console.log("CONNECTION SUCCESS!");
+    })
+    .catch((msgError) => {
+        console.log(msgError);
+    })
+
+// Setting engine view
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
+// Setting body parser
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
+// Routes
 app.get("/",(req, res) => {
     res.render("index");
 });
@@ -13,7 +32,14 @@ app.get("/question",(req, res) => {
 });
 
 app.post("/savequestion", (req, res) => {
-    res.send("Formulário recebido!");
+    let title = req.body.title;
+    let description = req.body.description;
+    questionModel.create({
+        title: title,
+        description: description
+    }).then(() => {
+        res.redirect("/");
+    });
 });
 
 // Initiating server

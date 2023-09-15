@@ -12,7 +12,7 @@ connection
     })
     .catch((msgError) => {
         console.log(msgError);
-    })
+    });
 
 // Setting engine view
 app.set('view engine', 'ejs');
@@ -24,10 +24,16 @@ app.use(bodyParser.json());
 
 // Routes
 app.get("/",(req, res) => {
-    res.render("index");
+    questionModel.findAll({ raw: true, order: [
+        ['id', 'DESC']
+    ]}).then(question => {
+        res.render("index", {
+            question: question
+        });
+    });
 });
 
-app.get("/question",(req, res) => {
+app.get("/questions",(req, res) => {
     res.render("question");
 });
 
@@ -40,6 +46,19 @@ app.post("/savequestion", (req, res) => {
     }).then(() => {
         res.redirect("/");
     });
+});
+
+app.get("/question/:id", (req, res) => {
+    let id = req.params.id;
+    questionModel.findOne({
+        where: {id: id}
+    }).then(question => {
+        if(question != undefined) {
+            res.render("question");
+        } else {
+            res.redirect("/");
+        }
+    })
 });
 
 // Initiating server

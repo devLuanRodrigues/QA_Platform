@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const connection = require("./db/db");
 const questionModel = require("./db/questionModel");
+const answerModel = require("./db/answerModel");
 
 // Database
 connection
@@ -24,7 +25,9 @@ app.use(bodyParser.json());
 
 // Routes
 app.get("/",(req, res) => {
-    questionModel.findAll({ raw: true, order: [
+    questionModel.findAll({ 
+        raw: true, 
+        order: [
         ['id', 'DESC']
     ]}).then(question => {
         res.render("index", {
@@ -48,18 +51,47 @@ app.post("/savequestion", (req, res) => {
     });
 });
 
+app.post("/saveanswer", (req, res) => {
+    let body = req.body.body;
+    let questionId = req.body.questionId;
+    answerModel.create({
+        body: body,
+        questionId: questionId
+    }).then(() => {
+        res.redirect("/question/" + questionId);
+    });
+});
+
 app.get("/question/:id", (req, res) => {
     let id = req.params.id;
     questionModel.findOne({
-        where: {id: id}
+        where: {
+            id: id
+        }
     }).then(question => {
         if(question != undefined) {
-            res.render("question");
+            answerModel.findAll({
+                where: {
+                    questionId: question.id
+                },
+                order: [
+                    [
+                    'id',
+                    'DESC'
+                    ]
+                ]
+            }).then(answers => {
+                res.render("question", {
+                    question: question,
+                    answers: answers
+                });
+            });
         } else {
             res.redirect("/");
         }
     })
 });
+
 
 // Initiating server
 app.listen(8080, function(error){

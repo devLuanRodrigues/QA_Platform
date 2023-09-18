@@ -34,7 +34,7 @@ QA_Platform is a question and answer platform that allows users to ask questions
     * npm install
 
 4. Start the server:
-    * nodemon index.js
+    * node index.js
 
 5. Access the platform in your browser at http://localhost:8080
 

@@ -46,4 +46,4 @@ This project is licensed under the MIT License
 
 If you have any questions or need assistance, please contact me at rodriguesluandev@gmail.com
 
-Enjoy building yout own question and answer community with QA Platform!
+Enjoy building your own question and answer community with QA Platform!

@@ -37,7 +37,7 @@ app.get("/",(req, res) => {
 });
 
 app.get("/questions",(req, res) => {
-    res.render("question");
+    res.render("questions");
 });
 
 app.post("/savequestion", (req, res) => {

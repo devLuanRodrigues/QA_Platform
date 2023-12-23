@@ -9,7 +9,7 @@
         <p> <%= question.description %></p>
         <hr>
         <form method="POST" action="/saveanswer">
-            <label>Resposta</label>
+            <label><strong>Resposta: </strong></label>
             <textarea placeholder="Digite sua resposta" class="form-control" name="body"></textarea> <hr>
             <input type="hidden" name="questionId" value="<%= question.id %>">
             <button type="submit" class="btn btn-primary">Enviar</button>
